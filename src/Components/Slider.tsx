@@ -104,10 +104,11 @@ const boxVariants = {
 
 const offset = 6;
 
-const Slider: React.FC<{ data: IGetMoviesTitle; index: number }> = ({
-  data,
-  index: slideIndex,
-}) => {
+const Slider: React.FC<{
+  data: IGetMoviesTitle;
+  index: number;
+  title: string;
+}> = ({ data, index: slideIndex, title }) => {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -136,10 +137,10 @@ const Slider: React.FC<{ data: IGetMoviesTitle; index: number }> = ({
   }, [data, leaving, toggleLeaving]);
 
   const onBoxClicked = useCallback(
-    (movieId: number) => {
-      navigate(`/movies/${movieId}`);
+    (movieId: number, sliderTitle: string) => {
+      navigate(`/${title}/${movieId}?title=${sliderTitle}`);
     },
-    [navigate]
+    [navigate, title]
   );
 
   const rowVariants = {
@@ -159,7 +160,6 @@ const Slider: React.FC<{ data: IGetMoviesTitle; index: number }> = ({
       x: -window.outerWidth - 5,
     },
   };
-  console.log("Render");
   return (
     <Wrapper slideIndex={slideIndex}>
       <TitleWrapper>
@@ -206,7 +206,7 @@ const Slider: React.FC<{ data: IGetMoviesTitle; index: number }> = ({
                   whileHover="hover"
                   initial="normal"
                   transition={{ type: "tween" }}
-                  onClick={() => onBoxClicked(movie.id)}
+                  onClick={() => onBoxClicked(movie.id, data.title)}
                   bgphoto={makeImagePath(movie.backdrop_path, "w500")}
                 >
                   <Info variants={infoVariants}>

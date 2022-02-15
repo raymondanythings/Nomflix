@@ -48,14 +48,7 @@ const Overview = styled.p`
   width: 50%;
 `;
 
-const wrapperVariants = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-};
-
 const Tv = () => {
-  console.log("Main Render");
   const { isLoading: nowLoading, data: nowData } = useQuery<IGetMoviesTitle>(
     ["tv", "latest"],
     tvApi.nowPlaying
@@ -86,7 +79,10 @@ const Tv = () => {
             <Overview>{nowData?.results[0].overview}</Overview>
           </Banner>
           {nowData && airingData && popularData && topData && (
-            <Sliders data={[nowData, airingData, popularData, topData]} />
+            <Sliders
+              data={[nowData, airingData, popularData, topData]}
+              title="tv"
+            />
           )}
         </>
       )}

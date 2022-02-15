@@ -3,7 +3,6 @@ import Header from "./Components/Header";
 import Home from "./Routes/Home";
 import Search from "./Routes/Search";
 import Tv from "./Routes/Tv";
-import TvTest from "./Routes/TvTest";
 
 function App() {
   return (
@@ -14,6 +13,7 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/" element={<Home />} />
         <Route path="/movies/:movieId" element={<Home />} />
+        <Route path="/tv/:movieId" element={<Tv />} />
       </Routes>
     </Router>
   );

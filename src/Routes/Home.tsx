@@ -1,13 +1,23 @@
 import { useQuery } from "react-query";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { IGetMoviesTitle, movieApi } from "../api";
 import Sliders from "../Components/Sliders";
 
 import { makeImagePath } from "../utils";
 
+const fadeIn = keyframes`
+0%{
+  opacity:  0 ;
+}
+100% {
+  opacity:  1;
+}
+`;
+
 const Wrapper = styled.div`
   background: black;
   padding-bottom: 100px;
+  animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
 const Loader = styled.div`
@@ -38,14 +48,7 @@ const Overview = styled.p`
   width: 50%;
 `;
 
-const wrapperVariants = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-};
-
 const Home = () => {
-  console.log("Home Render");
   const { isLoading: nowLoading, data: nowData } = useQuery<IGetMoviesTitle>(
     ["movies", "nowPlaying"],
     movieApi.nowPlaying
@@ -74,7 +77,7 @@ const Home = () => {
             <Overview>{nowData?.results[0].overview}</Overview>
           </Banner>
           {nowData && topData && upData && (
-            <Sliders data={[nowData, topData, upData]} />
+            <Sliders data={[nowData, topData, upData]} title="movies" />
           )}
         </>
       )}

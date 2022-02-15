@@ -1,6 +1,6 @@
 import { motion, useViewportScroll, AnimatePresence } from "framer-motion";
 import React from "react";
-import { useMatch, useNavigate } from "react-router-dom";
+import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IGetMoviesTitle } from "../api";
 import { makeImagePath } from "../utils";
@@ -49,9 +49,14 @@ const BigOverview = styled.p`
   color: ${(props) => props.theme.white.lighter};
 `;
 
-const Sliders: React.FC<{ data: IGetMoviesTitle[] }> = ({ data }) => {
+const Sliders: React.FC<{ data: IGetMoviesTitle[]; title: string }> = ({
+  data,
+  title,
+}) => {
   const navigate = useNavigate();
-  const bigMovieMatch = useMatch("/movies/:movieId");
+  const bigMovieMatch = useMatch(`/${title}/:movieId`);
+  const location = useLocation();
+  const sliderTitle = new URLSearchParams(location.search).get("title");
 
   const { scrollY } = useViewportScroll();
 
@@ -64,9 +69,7 @@ const Sliders: React.FC<{ data: IGetMoviesTitle[] }> = ({ data }) => {
         )
       )
       ?.results.find((movie) => movie.id + "" === bigMovieMatch.params.movieId);
-  if (bigMovieMatch) {
-    console.log(bigMovieMatch.params.movieId);
-  }
+
   const onOverlayClicked = () => {
     navigate(-1);
   };
@@ -75,10 +78,15 @@ const Sliders: React.FC<{ data: IGetMoviesTitle[] }> = ({ data }) => {
     <>
       {data &&
         data.map((movies, index) => (
-          <Slider key={movies.title} index={index} data={movies} />
+          <Slider
+            key={movies.title}
+            index={index}
+            data={movies}
+            title={title}
+          />
         ))}
       <AnimatePresence>
-        {bigMovieMatch ? (
+        {bigMovieMatch && sliderTitle ? (
           <>
             <Overlay
               onClick={onOverlayClicked}
@@ -86,7 +94,7 @@ const Sliders: React.FC<{ data: IGetMoviesTitle[] }> = ({ data }) => {
               exit={{ opacity: 0 }}
             />
             <BigMovie
-              layoutId={bigMovieMatch.params.movieId}
+              layoutId={bigMovieMatch.params.movieId + sliderTitle}
               style={{ top: scrollY.get() + 100 }}
             >
               {clickedMovie && (

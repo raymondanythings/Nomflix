@@ -113,7 +113,8 @@ const Header = () => {
   const navAnimation = useAnimation();
 
   const homeMatch = useMatch("/");
-  const tvMatch = useMatch("/tv");
+  const movieMatch = useMatch("/movies/*");
+  const tvMatch = useMatch("/tv/*");
 
   const { scrollY } = useViewportScroll();
 
@@ -156,7 +157,9 @@ const Header = () => {
         </Logo>
         <Items>
           <Item>
-            <Link to="/">Home {homeMatch && <Circle layoutId="circle" />}</Link>
+            <Link to="/">
+              Home {(homeMatch || movieMatch) && <Circle layoutId="circle" />}
+            </Link>
           </Item>
           <Item>
             <Link to="/tv">
