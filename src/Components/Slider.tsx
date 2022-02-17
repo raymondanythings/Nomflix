@@ -108,7 +108,8 @@ const Slider: React.FC<{
   data: IGetMoviesTitle;
   index: number;
   title: string;
-}> = ({ data, index: slideIndex, title }) => {
+  keyword?: string;
+}> = ({ data, index: slideIndex, title, keyword }) => {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -138,9 +139,15 @@ const Slider: React.FC<{
 
   const onBoxClicked = useCallback(
     (movieId: number, sliderTitle: string) => {
-      navigate(`/${title}/${movieId}?title=${sliderTitle}`);
+      if (keyword) {
+        navigate(
+          `/${title}/${movieId}?keyword=${keyword}&title=${sliderTitle}`
+        );
+      } else {
+        navigate(`/${title}/${movieId}?title=${sliderTitle}`);
+      }
     },
-    [navigate, title]
+    [navigate, title, keyword]
   );
 
   const rowVariants = {
@@ -210,7 +217,7 @@ const Slider: React.FC<{
                   bgphoto={makeImagePath(movie.backdrop_path, "w500")}
                 >
                   <Info variants={infoVariants}>
-                    <h4>{movie.title}</h4>
+                    <h4>{movie.title ?? movie.name}</h4>
                   </Info>
                 </Box>
               ))}

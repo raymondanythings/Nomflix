@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { motion, useAnimation, useViewportScroll } from "framer-motion";
-import { Link, useMatch } from "react-router-dom";
+import { Link, useMatch, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -62,7 +63,7 @@ const Circle = styled(motion.span)`
   background-color: ${(props) => props.theme.red};
 `;
 
-const Search = styled.span`
+const Search = styled.form`
   display: flex;
   align-items: center;
   color: white;
@@ -77,9 +78,10 @@ const logoVariants = {
     fillOpacity: [1],
   },
   active: {
-    fillOpacity: [0, 1, 0],
+    fillOpacity: [1, 0, 1],
     transition: {
       repeat: Infinity,
+      ease: "circIn",
     },
   },
 };
@@ -106,7 +108,19 @@ const navVariants = {
   },
 };
 
+interface IForm {
+  keyword: string;
+}
+
 const Header = () => {
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm<IForm>();
+
+  const onVaild = (data: IForm) => {
+    console.log(data);
+    navigate(`/search?keyword=${data.keyword}`);
+  };
+
   const [searchOpen, setSearchOpen] = useState(false);
 
   const inputAnimation = useAnimation();
@@ -169,8 +183,9 @@ const Header = () => {
         </Items>
       </Col>
       <Col>
-        <Search onClick={toggleSearch}>
+        <Search onSubmit={handleSubmit(onVaild)}>
           <motion.svg
+            onClick={toggleSearch}
             animate={{ x: searchOpen ? -180 : 0 }}
             transition={{ type: "linear" }}
             fill="currentColor"
@@ -184,6 +199,8 @@ const Header = () => {
             ></path>
           </motion.svg>
           <Input
+            {...register("keyword", { required: true, minLength: 2 })}
+            autoComplete="off"
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             transition={{ type: "linear" }}

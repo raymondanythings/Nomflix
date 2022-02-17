@@ -3,6 +3,8 @@ import React from "react";
 import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IGetMoviesTitle } from "../api";
+import { getGenres } from "../genres";
+import ReactCountryFlag from "react-country-flag";
 import { makeImagePath } from "../utils";
 import Slider from "./Slider";
 
@@ -24,7 +26,7 @@ const BigMovie = styled(motion.div)`
   margin: 0 auto;
   background-color: ${(props) => props.theme.black.lighter};
   border-radius: 15px;
-  overflow: hidden;
+  overflow-y: scroll;
 `;
 
 const BigCover = styled.div`
@@ -32,27 +34,32 @@ const BigCover = styled.div`
   background-size: cover;
   background-position: center center;
   height: 400px;
+  display: flex;
+  align-items: flex-end;
+  padding-right: 40px;
 `;
 
 const BigTitle = styled.h2`
   color: ${(props) => props.theme.white.lighter};
   padding: 10px;
   font-size: 48px;
-  position: relative;
-  top: -80px;
 `;
 
 const BigOverview = styled.p`
-  padding: 20px;
   position: relative;
-  top: -80px;
   color: ${(props) => props.theme.white.lighter};
 `;
 
-const Sliders: React.FC<{ data: IGetMoviesTitle[]; title: string }> = ({
-  data,
-  title,
-}) => {
+const BigContent = styled.div`
+  padding: 20px;
+  position: relative;
+`;
+
+const Sliders: React.FC<{
+  data: IGetMoviesTitle[];
+  title: string;
+  keyword?: string;
+}> = ({ data, title, keyword }) => {
   const navigate = useNavigate();
   const bigMovieMatch = useMatch(`/${title}/:movieId`);
   const location = useLocation();
@@ -64,15 +71,24 @@ const Sliders: React.FC<{ data: IGetMoviesTitle[]; title: string }> = ({
     bigMovieMatch?.params.movieId &&
     data
       .find((data) =>
-        data?.results.find(
-          (movie) => movie.id + "" === bigMovieMatch.params.movieId
-        )
+        data?.results.find((movie) => {
+          console.log(data);
+
+          return movie.id + "" === bigMovieMatch.params.movieId;
+        })
       )
       ?.results.find((movie) => movie.id + "" === bigMovieMatch.params.movieId);
 
+  // const clickedMovie =
+  //   bigMovieMatch && getDetail(bigMovieMatch?.params.movieId);
+
+  console.log(clickedMovie);
   const onOverlayClicked = () => {
     navigate(-1);
   };
+  const videoTitle = clickedMovie
+    ? clickedMovie.title ?? clickedMovie.name
+    : null;
 
   return (
     <>
@@ -80,6 +96,7 @@ const Sliders: React.FC<{ data: IGetMoviesTitle[]; title: string }> = ({
         data.map((movies, index) => (
           <Slider
             key={movies.title}
+            keyword={keyword}
             index={index}
             data={movies}
             title={title}
@@ -106,9 +123,26 @@ const Sliders: React.FC<{ data: IGetMoviesTitle[]; title: string }> = ({
                         "w500"
                       )})`,
                     }}
-                  />
-                  <BigTitle>{clickedMovie.title}</BigTitle>
-                  <BigOverview>{clickedMovie.overview}</BigOverview>
+                  >
+                    <BigTitle>{videoTitle && videoTitle}</BigTitle>
+                  </BigCover>
+
+                  <BigContent>
+                    <BigOverview>{clickedMovie.overview}</BigOverview>
+                    {clickedMovie.origin_country &&
+                      clickedMovie.origin_country.map((code) => (
+                        <ReactCountryFlag
+                          style={{ fontSize: "3rem" }}
+                          countryCode={code}
+                        />
+                      ))}
+                    <div>
+                      <span>{clickedMovie.adult ? 19 : "all"}</span>
+                      <span>
+                        {clickedMovie.genre_ids.map((m) => getGenres(m).name)}
+                      </span>
+                    </div>
+                  </BigContent>
                 </>
               )}
             </BigMovie>

@@ -66,6 +66,7 @@ body {
   line-height: 1.2;
   background-color: black;
   -ms-overflow-style: none;
+  overflow-x: hidden;
 }
 body::-webkit-scrollbar{
   display:none;
