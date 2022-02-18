@@ -7,7 +7,8 @@ import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div<{ slideIndex: number }>`
   position: relative;
-  margin: 20px 0px;
+  margin: 50px 0px;
+  ${(props) => (props.slideIndex === 0 ? "margin-top : 0px;" : null)}
   &:hover {
     .arrow {
       opacity: 0.5;
@@ -23,7 +24,7 @@ const Row = styled(motion.div)`
   width: 100%;
 `;
 
-const Box = styled(motion.div)<{ bgphoto: string }>`
+const Box = styled(motion.div)<{ bgphoto: string; index: number }>`
   background-color: white;
   background-image: url(${(props) => props.bgphoto});
   background-size: cover;
@@ -31,12 +32,12 @@ const Box = styled(motion.div)<{ bgphoto: string }>`
   height: 200px;
   font-size: 66px;
   cursor: pointer;
-  &:first-child {
-    transform-origin: center left;
-  }
-  &:last-child {
-    transform-origin: center right;
-  }
+  ${(props) =>
+    props.index === 0
+      ? "&:first-child {transform-origin: center left;}"
+      : props.index === 5
+      ? "&:last-child {transform-origin: center right;}"
+      : null}
 `;
 
 const Info = styled(motion.div)`
@@ -72,7 +73,7 @@ const TitleWrapper = styled.div`
   font-size: 1.4vw;
   line-height: 1.25vw;
   font-weight: 500;
-  margin-bottom: 0.5em;
+  margin-bottom: 1em;
 `;
 
 const infoVariants = {
@@ -205,11 +206,12 @@ const Slider: React.FC<{
             {data?.results
               .slice(1)
               .slice(offset * index, offset * index + offset)
-              .map((movie) => (
+              .map((movie, index) => (
                 <Box
                   layoutId={movie.id + data.title}
                   key={movie.id}
                   variants={boxVariants}
+                  index={index}
                   whileHover="hover"
                   initial="normal"
                   transition={{ type: "tween" }}

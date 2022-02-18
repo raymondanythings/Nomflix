@@ -16,7 +16,7 @@ const fadeIn = keyframes`
 
 const Wrapper = styled.div`
   background: black;
-  padding-bottom: 100px;
+  padding-bottom: 60px;
   animation: ${fadeIn} 0.5s ease-in-out;
 `;
 

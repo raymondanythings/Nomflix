@@ -72,8 +72,6 @@ const Sliders: React.FC<{
     data
       .find((data) =>
         data?.results.find((movie) => {
-          console.log(data);
-
           return movie.id + "" === bigMovieMatch.params.movieId;
         })
       )
@@ -86,6 +84,7 @@ const Sliders: React.FC<{
   const onOverlayClicked = () => {
     navigate(-1);
   };
+
   const videoTitle = clickedMovie
     ? clickedMovie.title ?? clickedMovie.name
     : null;
@@ -132,6 +131,7 @@ const Sliders: React.FC<{
                     {clickedMovie.origin_country &&
                       clickedMovie.origin_country.map((code) => (
                         <ReactCountryFlag
+                          key={code}
                           style={{ fontSize: "3rem" }}
                           countryCode={code}
                         />

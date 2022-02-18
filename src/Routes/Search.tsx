@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
-import { IGetMoviesTitle, IMovie, searchApi } from "../api";
+import { IGetMoviesTitle, searchApi } from "../api";
 import Sliders from "../Components/Sliders";
 
 const fadeIn = keyframes`
