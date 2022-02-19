@@ -189,6 +189,7 @@ const Header = () => {
           <motion.svg
             onClick={toggleSearch}
             animate={{ x: searchOpen ? -180 : 0 }}
+            style={{ cursor: "pointer" }}
             transition={{ type: "linear" }}
             fill="currentColor"
             viewBox="0 0 20 20"

@@ -41,11 +41,12 @@ const Banner = styled.div<{ bgphoto: string }>`
 const Title = styled.h2`
   font-size: 68px;
   margin-bottom: 20px;
+  white-space: nowrap;
 `;
 
 const Overview = styled.p`
   font-size: 30px;
-  width: 50%;
+  width: 500px;
 `;
 
 const Home = () => {

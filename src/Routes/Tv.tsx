@@ -2,7 +2,6 @@ import { useQuery } from "react-query";
 import styled, { keyframes } from "styled-components";
 import { IGetMoviesTitle, tvApi } from "../api";
 import Sliders from "../Components/Sliders";
-
 import { makeImagePath } from "../utils";
 
 const fadeIn = keyframes`
@@ -41,11 +40,12 @@ const Banner = styled.div<{ bgphoto: string }>`
 const Title = styled.h2`
   font-size: 68px;
   margin-bottom: 20px;
+  white-space: nowrap;
 `;
 
 const Overview = styled.p`
   font-size: 30px;
-  width: 50%;
+  max-width: 500px;
 `;
 
 const Tv = () => {

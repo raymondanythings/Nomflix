@@ -1,3 +1,4 @@
+import { IGenres } from "./genres";
 const API_KEY = "8ebfd1b48062a2857432fcc8f95c3ce9";
 const BASE_PATH = "https://api.themoviedb.org/3";
 
@@ -13,6 +14,114 @@ export interface IMovie {
   genre_ids: number[];
   media_type?: string;
   origin_country?: string[];
+}
+
+interface IProductionCompanies {
+  id: number;
+  logo_path: string;
+  name: string;
+  origin_country: string;
+}
+
+interface IProductionCountries {
+  iso_3166_1: string;
+  name: string;
+}
+
+interface ISpokenLanguages extends IProductionCountries {
+  english_name: string;
+}
+
+interface ICreatedBy {
+  credit_id: string;
+  gender: number;
+  id: number;
+  name: string;
+  profile_path: string;
+}
+
+interface IEpisodeToAir {
+  air_date: string;
+  episode_number: number;
+  id: number;
+  name: string;
+  overview: string;
+  production_code: string;
+  season_number: number;
+  still_path: string;
+  vote_average: number;
+  vote_count: number;
+}
+
+interface ISeasons {
+  air_date: string;
+  episode_count: number;
+  id: number;
+  overview: string;
+  poster_path: string;
+  season_number: number;
+}
+
+export interface IMovieDetail {
+  adult: boolean;
+  backdrop_path: string;
+  budget: number;
+  genres: IGenres[];
+  homepage: string;
+  id: number;
+  imdb_id: string;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  production_companies: IProductionCompanies[];
+  production_countries: IProductionCountries[];
+  release_date: string;
+  revenue: number;
+  runtime: number;
+  spoken_languages: ISpokenLanguages[];
+  status: string;
+  tagline: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
+export interface ITvDetail {
+  adult: boolean;
+  backdrop_path: string;
+  created_by: ICreatedBy[];
+  episode_run_time: number[];
+  first_air_date: string;
+  genres: IGenres[];
+  homepage: string;
+  id: number;
+  in_production: boolean;
+  languages: string[];
+  last_air_date: string;
+  last_episode_to_air: IEpisodeToAir;
+  name: string;
+  next_episode_to_air: IEpisodeToAir;
+  networks: IProductionCompanies[];
+  number_of_episodes: number;
+  number_of_seasons: number;
+  origin_country: string[];
+  original_language: string;
+  original_name: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  production_companies: IProductionCompanies[];
+  production_countries: IProductionCountries[];
+  seasons: ISeasons[];
+  spoken_languages: ISpokenLanguages[];
+  status: string;
+  tagline: string;
+  type: string;
+  vote_average: number;
+  vote_count: number;
 }
 
 export interface IGetMoviesResponse {
@@ -117,11 +226,16 @@ function getSearch(keyword: string) {
     });
 }
 
-// export async function getDetail(id: string | undefined) {
-//   if (id) {
-//     await fetch()
-//   }
-// }
+export function getMovieDetail(id: number) {
+  return fetch(
+    `${BASE_PATH}/movie/${id}?api_key=${API_KEY}&language=ko-KR`
+  ).then((res) => res.json());
+}
+export function getTvDetail(id: number) {
+  return fetch(`${BASE_PATH}/tv/${id}?api_key=${API_KEY}&language=ko-KR`).then(
+    (res) => res.json()
+  );
+}
 
 export const movieApi = {
   nowPlaying: () => getMovies(),
@@ -138,4 +252,9 @@ export const tvApi = {
 
 export const searchApi = {
   getSearch: (keyword: string) => getSearch(keyword),
+};
+
+export const detailApi = {
+  getMovieDetail: (id: number) => getMovieDetail(id),
+  getTvDetail: (id: number) => getTvDetail(id),
 };

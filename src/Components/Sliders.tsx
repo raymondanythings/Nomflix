@@ -3,10 +3,9 @@ import React from "react";
 import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IGetMoviesTitle } from "../api";
-import { getGenres } from "../genres";
-import ReactCountryFlag from "react-country-flag";
-import { makeImagePath } from "../utils";
+import MovieDetail from "./MovieDetail";
 import Slider from "./Slider";
+import TvDetail from "./TvDetail";
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -19,7 +18,7 @@ const Overlay = styled(motion.div)`
 
 const BigMovie = styled(motion.div)`
   position: absolute;
-  width: 40vw;
+  max-width: 850px;
   height: 80vh;
   left: 0;
   right: 0;
@@ -27,32 +26,10 @@ const BigMovie = styled(motion.div)`
   background-color: ${(props) => props.theme.black.lighter};
   border-radius: 15px;
   overflow-y: scroll;
-`;
-
-const BigCover = styled.div`
-  width: 100%;
-  background-size: cover;
-  background-position: center center;
-  height: 400px;
-  display: flex;
-  align-items: flex-end;
-  padding-right: 40px;
-`;
-
-const BigTitle = styled.h2`
-  color: ${(props) => props.theme.white.lighter};
-  padding: 10px;
-  font-size: 48px;
-`;
-
-const BigOverview = styled.p`
-  position: relative;
-  color: ${(props) => props.theme.white.lighter};
-`;
-
-const BigContent = styled.div`
-  padding: 20px;
-  position: relative;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Sliders: React.FC<{
@@ -80,14 +57,9 @@ const Sliders: React.FC<{
   // const clickedMovie =
   //   bigMovieMatch && getDetail(bigMovieMatch?.params.movieId);
 
-  console.log(clickedMovie);
   const onOverlayClicked = () => {
     navigate(-1);
   };
-
-  const videoTitle = clickedMovie
-    ? clickedMovie.title ?? clickedMovie.name
-    : null;
 
   return (
     <>
@@ -113,38 +85,12 @@ const Sliders: React.FC<{
               layoutId={bigMovieMatch.params.movieId + sliderTitle}
               style={{ top: scrollY.get() + 100 }}
             >
-              {clickedMovie && (
-                <>
-                  <BigCover
-                    style={{
-                      backgroundImage: `linear-gradient(to top , black,transparent), url(${makeImagePath(
-                        clickedMovie.backdrop_path,
-                        "w500"
-                      )})`,
-                    }}
-                  >
-                    <BigTitle>{videoTitle && videoTitle}</BigTitle>
-                  </BigCover>
-
-                  <BigContent>
-                    <BigOverview>{clickedMovie.overview}</BigOverview>
-                    {clickedMovie.origin_country &&
-                      clickedMovie.origin_country.map((code) => (
-                        <ReactCountryFlag
-                          key={code}
-                          style={{ fontSize: "3rem" }}
-                          countryCode={code}
-                        />
-                      ))}
-                    <div>
-                      <span>{clickedMovie.adult ? 19 : "all"}</span>
-                      <span>
-                        {clickedMovie.genre_ids.map((m) => getGenres(m).name)}
-                      </span>
-                    </div>
-                  </BigContent>
-                </>
-              )}
+              {clickedMovie &&
+                (clickedMovie.title ? (
+                  <MovieDetail id={clickedMovie.id} />
+                ) : (
+                  <TvDetail id={clickedMovie.id} />
+                ))}
             </BigMovie>
           </>
         ) : null}

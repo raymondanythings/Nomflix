@@ -29,7 +29,7 @@ interface IGenresName {
     | "전쟁 & 정치";
 }
 
-interface IGenres extends IGenresName {
+export interface IGenres extends IGenresName {
   id: number;
 }
 
