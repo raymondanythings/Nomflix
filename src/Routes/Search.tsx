@@ -39,6 +39,7 @@ const Search = () => {
     ["search", keyword],
     () => searchApi.getSearch(keyword)
   );
+
   return (
     <Wrapper>
       {isLoading ? (

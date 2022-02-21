@@ -54,9 +54,6 @@ const Sliders: React.FC<{
       )
       ?.results.find((movie) => movie.id + "" === bigMovieMatch.params.movieId);
 
-  // const clickedMovie =
-  //   bigMovieMatch && getDetail(bigMovieMatch?.params.movieId);
-
   const onOverlayClicked = () => {
     navigate(-1);
   };

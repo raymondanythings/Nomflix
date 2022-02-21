@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IGetMoviesTitle } from "../api";
 import { makeImagePath } from "../lib/utils";
+import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 
 const Wrapper = styled.div<{ slideIndex: number }>`
   position: relative;
@@ -11,7 +12,7 @@ const Wrapper = styled.div<{ slideIndex: number }>`
   ${(props) => (props.slideIndex === 0 ? "margin-top : 0px;" : null)}
   &:hover {
     .arrow {
-      opacity: 0.5;
+      opacity: 1;
     }
   }
 `;
@@ -56,16 +57,19 @@ const Info = styled(motion.div)`
 const ArrowBox = styled.div<{ pos: string }>`
   position: absolute;
   z-index: 1000;
-  background-color: gray;
+  background-color: rgba(24, 24, 24, 0.4);
   height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 30px;
   opacity: 0;
-  transition: opacity 0.5s ease-in-out;
   cursor: pointer;
   ${(props) => (props.pos === "left" ? "left: 0;" : "right: 0;")}
+  transition: all .2s linear;
+  &:hover {
+    font-size: 1.2rem;
+  }
 `;
 
 const TitleWrapper = styled.div`
@@ -139,13 +143,13 @@ const Slider: React.FC<{
   }, [data, leaving, toggleLeaving]);
 
   const onBoxClicked = useCallback(
-    (movieId: number, sliderTitle: string) => {
+    (movieId: number, sliderTitle: string, name: string) => {
       if (keyword) {
         navigate(
-          `/${title}/${movieId}?keyword=${keyword}&title=${sliderTitle}`
+          `/${title}/${movieId}?keyword=${keyword}&title=${sliderTitle}&name=${name}`
         );
       } else {
-        navigate(`/${title}/${movieId}?title=${sliderTitle}`);
+        navigate(`/${title}/${movieId}?title=${sliderTitle}&name=${name}`);
       }
     },
     [navigate, title, keyword]
@@ -182,7 +186,7 @@ const Slider: React.FC<{
           }}
           pos="left"
         >
-          &larr;
+          <HiArrowLeft />
         </ArrowBox>
         <ArrowBox
           className="arrow"
@@ -192,7 +196,7 @@ const Slider: React.FC<{
           }}
           pos="right"
         >
-          &rarr;
+          <HiArrowRight />
         </ArrowBox>
         <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
           <Row
@@ -215,7 +219,13 @@ const Slider: React.FC<{
                   whileHover="hover"
                   initial="normal"
                   transition={{ type: "tween" }}
-                  onClick={() => onBoxClicked(movie.id, data.title)}
+                  onClick={() =>
+                    onBoxClicked(
+                      movie.id,
+                      data.title,
+                      movie.name ?? movie.title
+                    )
+                  }
                   bgphoto={makeImagePath(movie.backdrop_path, "w500")}
                 >
                   <Info variants={infoVariants}>

@@ -118,7 +118,6 @@ const Header = () => {
   const { register, handleSubmit } = useForm<IForm>();
 
   const onVaild = (data: IForm) => {
-    console.log(data);
     navigate(`/search?keyword=${data.keyword}`);
   };
 
