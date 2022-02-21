@@ -16,23 +16,23 @@ export interface IMovie {
   origin_country?: string[];
 }
 
-interface IProductionCompanies {
+export interface IProductionCompanies {
   id: number;
   logo_path: string;
   name: string;
   origin_country: string;
 }
 
-interface IProductionCountries {
+export interface IProductionCountries {
   iso_3166_1: string;
   name: string;
 }
 
-interface ISpokenLanguages extends IProductionCountries {
+export interface ISpokenLanguages extends IProductionCountries {
   english_name: string;
 }
 
-interface ICreatedBy {
+export interface ICreatedBy {
   credit_id: string;
   gender: number;
   id: number;
@@ -53,10 +53,11 @@ interface IEpisodeToAir {
   vote_count: number;
 }
 
-interface ISeasons {
+export interface ISeasons {
   air_date: string;
   episode_count: number;
   id: number;
+  name: string;
   overview: string;
   poster_path: string;
   season_number: number;
@@ -220,8 +221,8 @@ function getSearch(keyword: string) {
         }
       });
       return [
-        { title: "Search Movies", results: movies },
-        { title: "Search Tv Shows", results: tv },
+        { title: `'${keyword}' on Movies`, results: movies },
+        { title: `'${keyword}' on Tv Shows`, results: tv },
       ];
     });
 }

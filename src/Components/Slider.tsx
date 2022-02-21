@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IGetMoviesTitle } from "../api";
-import { makeImagePath } from "../utils";
+import { makeImagePath } from "../lib/utils";
 
 const Wrapper = styled.div<{ slideIndex: number }>`
   position: relative;

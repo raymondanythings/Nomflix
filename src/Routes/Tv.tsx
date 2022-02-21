@@ -1,8 +1,9 @@
 import { useQuery } from "react-query";
 import styled, { keyframes } from "styled-components";
 import { IGetMoviesTitle, tvApi } from "../api";
+import Loader from "../Components/Loader";
 import Sliders from "../Components/Sliders";
-import { makeImagePath } from "../utils";
+import { makeImagePath } from "../lib/utils";
 
 const fadeIn = keyframes`
 0%{
@@ -17,13 +18,6 @@ const Wrapper = styled.div`
   background: black;
   padding-bottom: 60px;
   animation: ${fadeIn} 0.5s ease-in-out;
-`;
-
-const Loader = styled.div`
-  height: 20vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Banner = styled.div<{ bgphoto: string }>`
@@ -67,15 +61,13 @@ const Tv = () => {
   return (
     <Wrapper>
       {isLoading ? (
-        <Loader>Loading ...</Loader>
+        <Loader main={true} />
       ) : (
         <>
           <Banner
             bgphoto={makeImagePath(nowData?.results[0].backdrop_path || "")}
           >
-            <Title>
-              {nowData?.results[0].title ?? nowData?.results[0].original_name}
-            </Title>
+            <Title>{nowData?.results[0].original_name}</Title>
             <Overview>{nowData?.results[0].overview}</Overview>
           </Banner>
           {nowData && airingData && popularData && topData && (
