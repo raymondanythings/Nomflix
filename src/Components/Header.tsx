@@ -145,8 +145,6 @@ const Header = () => {
     setSearchOpen((prev) => !prev);
   };
 
-  console.log(Boolean(homeMatch || movieMatch));
-
   useEffect(() => {
     scrollY.onChange(() => {
       if (scrollY.get() !== 0) {

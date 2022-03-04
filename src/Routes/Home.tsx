@@ -69,7 +69,13 @@ const Home = () => {
             bgphoto={makeImagePath(nowData?.results[0].backdrop_path || "")}
           >
             <Title>{nowData?.results[0].title}</Title>
-            <Overview>{nowData?.results[0].overview}</Overview>
+            <Overview>
+              {nowData?.results[0].overview
+                ? nowData?.results[0].overview.length >= 120
+                  ? nowData?.results[0].overview.slice(0, 120) + " ..."
+                  : nowData?.results[0].overview
+                : null}
+            </Overview>
           </Banner>
           {nowData && topData && upData && (
             <Sliders data={[nowData, topData, upData]} title="movies" />
